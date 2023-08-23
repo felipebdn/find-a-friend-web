@@ -94,7 +94,7 @@ export function FormHome({ ufData }: resState) {
           value={county}
           onValueChange={handleCountyChange}
         >
-          <Select.Trigger className="text-4 inline-flex items-center justify-center gap-[5px] rounded-[20px] border border-white bg-transparent bg-white bg-opacity-0 px-3 py-5 font-bold leading-none text-white outline-none">
+          <Select.Trigger className="text-4 inline-flex items-center justify-center gap-[5px] rounded-[20px] bg-red-dark px-3 py-5 font-bold leading-none text-white outline-none">
             <Select.Value className="text-xl font-bold leading-relaxed text-white">
               {county || 'Escolha uma cidade'}
             </Select.Value>
@@ -132,7 +132,7 @@ export function FormHome({ ufData }: resState) {
         </Select.Root>
       </div>
       <button type="submit" className="rounded-[20px] bg-yellow p-5">
-        <Search className="text-black" strokeWidth={3} size={26} />
+        <Search className="text-blue" strokeWidth={3} size={26} />
       </button>
     </form>
   )
