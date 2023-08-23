@@ -32,8 +32,8 @@ export default async function Home() {
         </h6>
       </div>
       <div className="flex flex-col justify-between">
-        <Image src={hero} alt="" className="mt-14 w-full" />
-        <FormHome data={data} />
+        <Image src={hero} alt="" className="mt-14 w-full" priority={true} />
+        <FormHome ufData={data} />
       </div>
     </div>
   )
