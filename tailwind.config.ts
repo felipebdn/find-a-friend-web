@@ -10,6 +10,9 @@ const config: Config = {
     colors: {
       background: '#F15156',
       white: '#FFFFFF',
+      yellow: '#F4D35E',
+      black: '#000000',
+      transparent: '#00000000',
     },
   },
   plugins: [require('@tailwindcss/forms')],
