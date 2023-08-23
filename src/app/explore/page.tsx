@@ -4,12 +4,6 @@ import Image from 'next/image'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import icoLogo from '../../assets/ico-logo.svg'
 
-// energy_level: z.coerce.number().min(1).max(5),
-// size: z.enum(['small', 'medium', 'big']),
-// age: z.enum(['cub', 'adolescent', 'elderly']),
-// description: z.string(),
-// independence: z.enum(['low', 'medium', 'high']),
-
 export default function Explore() {
   return (
     <form className="flex">
