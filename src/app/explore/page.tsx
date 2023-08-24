@@ -4,6 +4,7 @@ import icoLogo from '../../assets/ico-logo.svg'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Search } from 'lucide-react'
 import { InputSelectForm } from './components/SelectInput'
 
 const formShema = z.object({
@@ -27,17 +28,59 @@ export default function Explore() {
   }
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       <form onSubmit={handleSubmit(submitForm)}>
-        <header className="w-full bg-red-dark px-14 pb-7 pt-20">
+        <header className="w-full bg-red-dark px-14 py-7">
           <Image src={icoLogo} alt="" />
-          <div></div>
+          <div className="flex gap-2">
+            <InputSelectForm
+              type="location"
+              formProps={{ control, name: 'uf' }}
+              placeholder="Escolha"
+              options={[
+                {
+                  text: 'Filhote',
+                  value: 'cub',
+                },
+                {
+                  text: 'Adolescente',
+                  value: 'adolescent',
+                },
+                {
+                  text: 'Velho',
+                  value: 'elderly',
+                },
+              ]}
+            />
+            <InputSelectForm
+              type="location"
+              formProps={{ control, name: 'county' }}
+              placeholder="Escolha"
+              options={[
+                {
+                  text: 'Filhote',
+                  value: 'cub',
+                },
+                {
+                  text: 'Adolescente',
+                  value: 'adolescent',
+                },
+                {
+                  text: 'Velho',
+                  value: 'elderly',
+                },
+              ]}
+            />
+            <button type="submit" className="rounded-[20px] bg-yellow p-4">
+              <Search className="text-blue" strokeWidth={3} size={26} />
+            </button>
+          </div>
         </header>
-        <div className="flex flex-col justify-center px-14 py-7">
+        <div className="flex flex-col justify-center gap-7 px-14 py-7">
           <h3 className="text-xl font-bold leading-relaxed text-white">
             Filtros
           </h3>
-          <div>
+          <div className="flex flex-col gap-3">
             <label htmlFor="age" className="text-xs font-medium text-white">
               Idade
             </label>
@@ -61,7 +104,7 @@ export default function Explore() {
               ]}
             />
           </div>
-          <div>
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="energy_level"
               className="text-xs font-medium text-white"
@@ -96,7 +139,7 @@ export default function Explore() {
               ]}
             />
           </div>
-          <div>
+          <div className="flex flex-col gap-3">
             <label htmlFor="size" className="text-xs font-medium text-white">
               Porte do animal
             </label>
@@ -120,7 +163,7 @@ export default function Explore() {
               ]}
             />
           </div>
-          <div>
+          <div className="flex flex-col gap-3">
             <label
               htmlFor="independence"
               className="text-xs font-medium text-white"

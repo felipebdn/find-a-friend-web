@@ -5,11 +5,11 @@ import { VariantProps, tv } from 'tailwind-variants'
 import { FormShemaType } from '../page'
 
 const select = tv({
-  base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl p-5 font-bold leading-none text-white outline-none',
+  base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl px-5 py-4 font-bold leading-none text-white outline-none',
   variants: {
     type: {
-      filter: 'bg-red-light ',
-      location: '',
+      filter: 'bg-red-light',
+      location: 'bg-transparent border border-red-light',
     },
   },
 })

@@ -2,7 +2,7 @@ import Image from 'next/image'
 import logo from '../assets/logo.svg'
 import hero from '../assets/hero.png'
 import { apiDistrict } from '@/lib/api-district'
-import { FormHome } from '@/components/forms/home'
+import { FormHome } from '@/components/FormHome'
 
 interface resState {
   id: number
