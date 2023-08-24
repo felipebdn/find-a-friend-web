@@ -27,17 +27,22 @@ export default function Explore() {
   }
 
   return (
-    <div className="flex">
+    <div className="flex h-screen">
       <form onSubmit={handleSubmit(submitForm)}>
-        <header>
+        <header className="w-full bg-red-dark px-14 pb-7 pt-20">
           <Image src={icoLogo} alt="" />
           <div></div>
         </header>
-        <div>
-          <h3>Filtros</h3>
+        <div className="flex flex-col justify-center px-14 py-7">
+          <h3 className="text-xl font-bold leading-relaxed text-white">
+            Filtros
+          </h3>
           <div>
-            <label htmlFor="age">Idade</label>
+            <label htmlFor="age" className="text-xs font-medium text-white">
+              Idade
+            </label>
             <InputSelectForm
+              type="filter"
               formProps={{ control, name: 'age' }}
               placeholder="Escolha"
               options={[
@@ -57,8 +62,14 @@ export default function Explore() {
             />
           </div>
           <div>
-            <label htmlFor="energy_level">Nivel de Energia</label>
+            <label
+              htmlFor="energy_level"
+              className="text-xs font-medium text-white"
+            >
+              Nivel de Energia
+            </label>
             <InputSelectForm
+              type="filter"
               formProps={{ control, name: 'energy_level' }}
               placeholder="Escolha"
               options={[
@@ -86,8 +97,11 @@ export default function Explore() {
             />
           </div>
           <div>
-            <label htmlFor="size">Porte do animal</label>
+            <label htmlFor="size" className="text-xs font-medium text-white">
+              Porte do animal
+            </label>
             <InputSelectForm
+              type="filter"
               formProps={{ control, name: 'size' }}
               placeholder="Escolha"
               options={[
@@ -107,8 +121,14 @@ export default function Explore() {
             />
           </div>
           <div>
-            <label htmlFor="independence">Nível de dependência</label>
+            <label
+              htmlFor="independence"
+              className="text-xs font-medium text-white"
+            >
+              Nível de dependência
+            </label>
             <InputSelectForm
+              type="filter"
               formProps={{ control, name: 'independence' }}
               placeholder="Escolha"
               options={[

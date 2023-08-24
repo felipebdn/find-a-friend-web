@@ -1,14 +1,14 @@
-import { UseControllerProps, useController } from 'react-hook-form'
-import { FormShemaType } from '../page'
-import { ChevronDown, ChevronUp } from 'lucide-react'
 import * as Select from '@radix-ui/react-select'
+import { UseControllerProps, useController } from 'react-hook-form'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { VariantProps, tv } from 'tailwind-variants'
+import { FormShemaType } from '../page'
 
 const select = tv({
-  base: 'inline-flex items-center justify-between gap-1 rounded-[20px] p-5 font-bold leading-none text-white outline-none',
+  base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl p-5 font-bold leading-none text-white outline-none',
   variants: {
     type: {
-      filter: '',
+      filter: 'bg-red-light ',
       location: '',
     },
   },
@@ -34,14 +34,11 @@ export function InputSelectForm({
   return (
     <Select.Root name={field.name} onValueChange={field.onChange}>
       <Select.Trigger className={select({ type })}>
-        <Select.Value
-          placeholder={placeholder}
-          className="text-xl font-bold leading-relaxed text-white"
-        >
+        <Select.Value>
           {options.find((item) => item.value === field.value)?.text ||
             placeholder}
         </Select.Value>
-        <Select.Icon className="text-white">
+        <Select.Icon>
           <ChevronDown />
         </Select.Icon>
       </Select.Trigger>
