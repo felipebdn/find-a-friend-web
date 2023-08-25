@@ -1,12 +1,12 @@
 'use client'
-import { Search, ChevronDown, ChevronUp } from 'lucide-react'
-import { useEffect } from 'react'
-import * as Select from '@radix-ui/react-select'
-import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { useStateHook } from '@/lib/use-state-hook'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as Select from '@radix-ui/react-select'
+import { ChevronDown, ChevronUp, Search } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 interface resState {
   ufData: {
@@ -46,7 +46,7 @@ export function FormHome({ ufData }: resState) {
   }
 
   function submitForm(data: FormSchemaType) {
-    route.push(`/explore?state=${data.uf}&county=${data.county}`)
+    route.push(`/explore?state=${data.uf}&city=${data.county}`)
   }
 
   return (

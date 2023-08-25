@@ -8,7 +8,7 @@ import icoLogo from '../../../assets/ico-logo.svg'
 import Image from 'next/image'
 import { useStateHook } from '@/lib/use-state-hook'
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 interface formExploreProps {
   ufData: {
@@ -34,7 +34,7 @@ export function FormExplore({ ufData }: formExploreProps) {
 
   const route = useRouter()
 
-  const { control, handleSubmit, reset } = useForm<FormShemaType>({
+  const { control, handleSubmit, reset, setValue } = useForm<FormShemaType>({
     resolver: zodResolver(formShema),
   })
 
@@ -49,15 +49,24 @@ export function FormExplore({ ufData }: formExploreProps) {
   function handleCountyChange(handleCounty: string) {
     setCounty(handleCounty)
   }
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const state = searchParams.get('state')
+    const city = searchParams.get('city')
+    state && setUf(state)
+    state && setValue('uf', state)
+    city && setCounty(city)
+    city && setValue('county', city)
+  }, [searchParams, setUf, setCounty, setValue])
 
   function submitForm(data: FormShemaType) {
     route.push(
-      `/explore?state=${data.uf}&county=${data.county}&energy_level=${data.energy_level}&size=${data.size}&age=${data.age}&independence=${data.independence}`,
+      `/explore?state=${data.uf}&city=${data.county}&energy_level=${data.energy_level}&size=${data.size}&age=${data.age}&independence=${data.independence}`,
     )
   }
 
   function handleResetForm() {
-    reset()
+    searchParams.delete()
   }
 
   return (

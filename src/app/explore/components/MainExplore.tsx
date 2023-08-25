@@ -1,6 +1,6 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { api } from '@/lib/api-server'
 
 interface resApiType {
@@ -20,22 +20,24 @@ interface resApiType {
 export function MainExplore() {
   const searchParams = useSearchParams()
 
-  // /explore?state=${data.uf}&county=${data.county}&energy_level=${data.energy_level}&size=${data.size}&age=${data.age}&independence=${data.independence}
-
-  console.log(searchParams.getAll)
-
   const [pets, setPets] = useState([] as resApiType[])
 
   const getPets = useCallback(async () => {
-    const res = await api.get('/pets', {
-      params: {
-        state: 'PA',
-        city: 'Conceição do Araguaia',
-      },
-    })
+    const params: Record<string, string> = {}
 
-    setPets(res.data.pets)
-  }, [])
+    for (const [key, value] of searchParams.entries()) {
+      if (value !== 'undefined') {
+        params[key] = value
+      }
+    }
+
+    if (params.city && params.state) {
+      const res = await api.get('/pets', {
+        params,
+      })
+      setPets(res.data.pets)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     getPets()
