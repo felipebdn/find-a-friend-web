@@ -9,3 +9,22 @@
 body {
   @apply bg-red;
 }
+
+
+/* Esconde a barra de rolagem no Chrome, Safari e Edge */
+.scrollbar-none::-webkit-scrollbar {
+  width: 0;
+}
+
+.scrollbar-none::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollbar-none::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+/* Esconde a barra de rolagem no Firefox */
+.scrollbar-none {
+  scrollbar-width: none;
+}

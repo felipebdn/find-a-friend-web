@@ -2,7 +2,7 @@ import * as Select from '@radix-ui/react-select'
 import { UseControllerProps, useController } from 'react-hook-form'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { VariantProps, tv } from 'tailwind-variants'
-import { FormShemaType } from '../page'
+import { FormShemaType } from './FormExplore'
 
 const select = tv({
   base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl px-5 py-4 font-bold leading-none text-white outline-none',
@@ -21,6 +21,8 @@ interface inputSelectFormProps extends VariantProps<typeof select> {
     text: string
   }[]
   placeholder: string
+  handleStateChange?: (handleUf: string) => void
+  handleCountyChange?: (handleCounty: string) => void
 }
 
 export function InputSelectForm({
@@ -28,11 +30,20 @@ export function InputSelectForm({
   options,
   placeholder,
   type,
+  handleStateChange,
+  handleCountyChange,
 }: inputSelectFormProps) {
   const { field } = useController(formProps)
 
   return (
-    <Select.Root name={field.name} onValueChange={field.onChange}>
+    <Select.Root
+      name={field.name}
+      onValueChange={(value) => {
+        field.onChange(value)
+        handleStateChange && handleStateChange(value)
+        handleCountyChange && handleCountyChange(value)
+      }}
+    >
       <Select.Trigger className={select({ type })}>
         <Select.Value>
           {options.find((item) => item.value === field.value)?.text ||

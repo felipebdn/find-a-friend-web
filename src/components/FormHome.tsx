@@ -1,12 +1,12 @@
 'use client'
-import { apiDistrict } from '@/lib/api-district'
 import { Search, ChevronDown, ChevronUp } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import * as Select from '@radix-ui/react-select'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import { useStateHook } from '@/lib/use-state-hook'
 
 interface resState {
   ufData: {
@@ -14,11 +14,6 @@ interface resState {
     sigla: string
     nome: string
   }[]
-}
-
-interface resCountsType {
-  id: number
-  nome: string
 }
 
 const formSchema = z.object({
@@ -29,24 +24,10 @@ const formSchema = z.object({
 type FormSchemaType = z.infer<typeof formSchema>
 
 export function FormHome({ ufData }: resState) {
-  const [countys, setCountys] = useState([] as resCountsType[])
-  const [uf, setUf] = useState(ufData[0].sigla)
-  const [county, setCounty] = useState<string | undefined>(undefined)
+  const { county, countys, requestApiState, setCounty, setUf, uf } =
+    useStateHook()
 
   const route = useRouter()
-
-  const requestApiState = useCallback(async () => {
-    const { data }: { data: resCountsType[] } = await apiDistrict.get(
-      `/localidades/estados/${uf}/municipios`,
-      {
-        params: {
-          orderBy: 'nome',
-        },
-      },
-    )
-
-    setCountys(data)
-  }, [uf])
 
   const { handleSubmit, control } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
