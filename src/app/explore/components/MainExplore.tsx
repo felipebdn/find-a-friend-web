@@ -1,7 +1,11 @@
 'use client'
+import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { api } from '@/lib/api-server'
+import icoLogo from '@/assets/ico-logo.svg'
+import petImage from '@/assets/pet.png'
+import Link from 'next/link'
 
 interface resApiType {
   id: string
@@ -44,15 +48,47 @@ export function MainExplore() {
   }, [getPets])
 
   return (
-    <main className="grid flex-1 bg-white">
-      {pets &&
-        pets.map((pet) => {
-          return (
-            <div key={pet.id}>
-              <h3>{pet.name}</h3>
-            </div>
-          )
-        })}
+    <main className="bg-background flex flex-1 flex-col gap-14 overflow-y-scroll px-10 py-20">
+      <div>
+        <p className="text-xl font-normal text-blue">
+          Encontre{' '}
+          <strong className="font-extrabold">
+            {pets.length} {pets.length > 1 ? 'amigos' : 'amigo'}
+          </strong>{' '}
+          na sua cidade
+        </p>
+      </div>
+      <div className="flex w-full flex-wrap gap-4">
+        {pets &&
+          pets.map((pet, i) => {
+            return (
+              <Link
+                href={`/pet/${pet.id}`}
+                key={pet.id}
+                className="group flex w-fit flex-col items-center rounded-[27px] bg-white p-1 transition-colors hover:bg-blue"
+              >
+                <div className="relative h-32 w-full min-w-[274px] overflow-hidden rounded-3xl">
+                  <Image
+                    src={petImage}
+                    alt=""
+                    className="absolute top-1/2 w-full -translate-y-1/2"
+                  />
+                </div>
+                <div className="relative -mt-6 flex flex-col items-center">
+                  <div
+                    className="flex w-fit rounded-[10px] border-[3px] border-white p-4 group-hover:border-blue data-[color=false]:bg-yellow data-[color=true]:bg-red"
+                    data-color={i % 2 === 0}
+                  >
+                    <Image src={icoLogo} alt="" className="h-4 w-4" />
+                  </div>
+                  <h3 className="mb-2 pt-1 text-lg font-bold leading-5 text-blue group-hover:text-white">
+                    {pet.name}
+                  </h3>
+                </div>
+              </Link>
+            )
+          })}
+      </div>
     </main>
   )
 }

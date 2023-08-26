@@ -15,7 +15,11 @@ const config: Config = {
       white: '#FFFFFF',
       yellow: '#F4D35E',
       black: '#000000',
+      background: '#FDECED',
       transparent: '#00000000',
+      complemets: {
+        text: '#8FA7B2',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

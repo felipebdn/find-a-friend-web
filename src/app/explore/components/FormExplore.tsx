@@ -9,6 +9,7 @@ import Image from 'next/image'
 import { useStateHook } from '@/lib/use-state-hook'
 import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 interface formExploreProps {
   ufData: {
@@ -34,9 +35,10 @@ export function FormExplore({ ufData }: formExploreProps) {
 
   const route = useRouter()
 
-  const { control, handleSubmit, reset, setValue } = useForm<FormShemaType>({
-    resolver: zodResolver(formShema),
-  })
+  const { control, handleSubmit, setValue, resetField } =
+    useForm<FormShemaType>({
+      resolver: zodResolver(formShema),
+    })
 
   useEffect(() => {
     requestApiState()
@@ -53,6 +55,7 @@ export function FormExplore({ ufData }: formExploreProps) {
   useEffect(() => {
     const state = searchParams.get('state')
     const city = searchParams.get('city')
+
     state && setUf(state)
     state && setValue('uf', state)
     city && setCounty(city)
@@ -66,13 +69,17 @@ export function FormExplore({ ufData }: formExploreProps) {
   }
 
   function handleResetForm() {
-    searchParams.delete()
+    route.refresh()
+    resetField('age')
+    resetField('energy_level')
+    resetField('independence')
+    resetField('size')
   }
 
   return (
     <form
       onSubmit={handleSubmit(submitForm)}
-      className="scrollbar-none h-full overflow-y-scroll"
+      className="scrollbar-none h-full overflow-y-scroll bg-red"
     >
       <header className="flex w-full flex-col gap-6 bg-red-dark px-14 py-7">
         <Image src={icoLogo} alt="" />
@@ -111,12 +118,13 @@ export function FormExplore({ ufData }: formExploreProps) {
           <h3 className="text-xl font-bold leading-relaxed text-white">
             Filtros
           </h3>
-          <button
-            className="font-medium leading-tight text-white transition-colors hover:text-yellow"
+          <Link
+            href="/explore"
             onClick={handleResetForm}
+            className="font-medium leading-tight text-white transition-colors hover:text-yellow"
           >
             Limpar
-          </button>
+          </Link>
         </div>
         <div className="flex flex-col gap-3">
           <label htmlFor="age" className="text-xs font-medium text-white">
