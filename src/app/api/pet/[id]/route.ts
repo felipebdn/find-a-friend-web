@@ -44,6 +44,8 @@ export async function GET(
 
   const { data }: { data: getPetTypes } = await api.get(`/pet/${params.id}`)
 
+  console.log(data)
+
   return NextResponse.json({
     ...data,
   })
