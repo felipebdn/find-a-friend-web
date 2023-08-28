@@ -20,6 +20,18 @@ export interface getPetTypes {
     url: string
     pet_id: string
   }[]
+  org: {
+    id: string
+    name: string
+    organization: string
+    road: string
+    number: string
+    sector: string
+    city: string
+    state: string
+    cep: number
+    whatsapp: string
+  }
 }
 
 export async function GET(

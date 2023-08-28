@@ -5,13 +5,14 @@ import icoLogo from '@/assets/ico-logo.svg'
 import { nextApi } from '@/lib/api-next'
 import { getPetTypes } from '@/app/api/pet/[id]/route'
 import { Galery } from './Galery'
+import whatsapp from '@/assets/whatsapp.svg'
 
 export default async function InfoPet({ params }: { params: { id: string } }) {
   const { data }: { data: getPetTypes } = await nextApi.get(
     `/api/pet/${params.id}`,
   )
 
-  const { images, pet } = data
+  const { images, pet, org } = data
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -39,7 +40,6 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
           <p className="mt-5 w-full text-lg font-semibold leading-7 text-blue">
             {pet.description}
           </p>
-
           <div className="mb-10 mt-10 grid grid-cols-3 gap-4 border-b border-blue border-opacity-10 pb-10">
             <div className="flex flex-col justify-between gap-3 border border-blue border-opacity-10 p-6">
               <div className="flex w-full justify-between gap-1">
@@ -85,10 +85,21 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
             </div>
           </div>
           <div className="flex gap-5">
-            <span className="flex w-fit rounded-2xl bg-yellow-dark p-4">
+            <span className="flex h-fit w-fit rounded-2xl bg-yellow-dark p-4">
               <Image src={icoLogo} alt="" width={28} height={28} />
             </span>
-            <h3>{}</h3>
+            <div>
+              <h3 className="mt-2 text-3xl font-bold leading-7 text-blue">
+                {org.name}
+              </h3>
+              <p className="text-base font-semibold leading-7 text-blue">{`${org.road}, ${org.number}, ${org.sector}, ${org.city} - ${org.state}`}</p>
+              <div className="mt-2 flex w-fit items-center gap-2 rounded-xl bg-blue bg-opacity-5 px-8 py-3">
+                <Image src={whatsapp} alt="" className="text-blue" />
+                <span className="text-lg font-bold leading-7 text-blue">
+                  {org.whatsapp}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </main>
