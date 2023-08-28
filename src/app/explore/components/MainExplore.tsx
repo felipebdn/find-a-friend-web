@@ -48,7 +48,7 @@ export function MainExplore() {
   }, [getPets])
 
   return (
-    <main className="bg-background flex flex-1 flex-col gap-14 overflow-y-scroll px-10 py-20">
+    <main className="flex flex-1 flex-col gap-14 overflow-y-scroll bg-background px-10 py-20">
       <div>
         <p className="text-xl font-normal text-blue">
           Encontre{' '}

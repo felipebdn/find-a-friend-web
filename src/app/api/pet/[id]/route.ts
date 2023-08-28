@@ -1,0 +1,38 @@
+import { api } from '@/lib/api-server'
+import { NextResponse } from 'next/server'
+
+export interface getPetTypes {
+  pet: {
+    id: string
+    collar: string
+    name: string
+    energy_level: number
+    size: 'small' | 'medium' | 'big'
+    age: 'cub' | 'adolescent' | 'elderly'
+    description: string
+    requirements: string
+    independence: 'low' | 'medium' | 'high'
+    anvironment: string
+    org_id: string
+  }
+  images: {
+    id: string
+    url: string
+    pet_id: string
+  }[]
+}
+
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } },
+) {
+  if (req.method !== 'GET') {
+    return NextResponse.error()
+  }
+
+  const { data }: { data: getPetTypes } = await api.get(`/pet/${params.id}`)
+
+  return NextResponse.json({
+    ...data,
+  })
+}
