@@ -40,7 +40,7 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
             {pet.description}
           </p>
 
-          <div className="mt-10 grid grid-cols-3 gap-4">
+          <div className="mb-10 mt-10 grid grid-cols-3 gap-4 border-b border-blue border-opacity-10 pb-10">
             <div className="flex flex-col justify-between gap-3 border border-blue border-opacity-10 p-6">
               <div className="flex w-full justify-between gap-1">
                 {new Array(5).fill('').map((_, i) => {
@@ -83,6 +83,12 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
                 {pet.size === 'big' && 'Grande'}
               </p>
             </div>
+          </div>
+          <div className="flex gap-5">
+            <span className="flex w-fit rounded-2xl bg-yellow-dark p-4">
+              <Image src={icoLogo} alt="" width={28} height={28} />
+            </span>
+            <h3>{}</h3>
           </div>
         </div>
       </main>
