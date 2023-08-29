@@ -51,6 +51,7 @@ export function FormExplore({ ufData }: formExploreProps) {
   function handleCountyChange(handleCounty: string) {
     setCounty(handleCounty)
   }
+
   const searchParams = useSearchParams()
   useEffect(() => {
     const state = searchParams.get('state')

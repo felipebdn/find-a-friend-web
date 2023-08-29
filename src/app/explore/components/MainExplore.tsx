@@ -2,10 +2,10 @@
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
-import { api } from '@/lib/api-server'
+import Link from 'next/link'
 import icoLogo from '@/assets/ico-logo.svg'
 import petImage from '@/assets/pet.png'
-import Link from 'next/link'
+import { api } from '@/lib/api-server'
 
 interface resApiType {
   id: string
@@ -39,6 +39,7 @@ export function MainExplore() {
       const res = await api.get('/pets', {
         params,
       })
+
       setPets(res.data.pets)
     }
   }, [searchParams])

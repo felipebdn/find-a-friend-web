@@ -28,12 +28,12 @@ export function Galery({ images }: GaleryProps) {
         className="flex gap-4 px-16 data-[amount=true]:justify-between data-[amount=false]:justify-evenly"
       >
         {images &&
-          images.map((image) => {
+          images.map((image, i) => {
             return (
               <div
                 className="relative h-20 w-20 overflow-hidden rounded-2xl transition-opacity hover:cursor-pointer data-[select=false]:opacity-50"
                 data-select={imageIndex === image.url}
-                key={image.pet_id}
+                key={i}
                 onClick={() => setImageIndex(image.url)}
               >
                 <Image

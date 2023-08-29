@@ -1,10 +1,11 @@
-import { ArrowLeftIcon, Dot, Scan, Zap } from 'lucide-react'
+import { ArrowLeftIcon, Dot, Info, Scan, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import icoLogo from '@/assets/ico-logo.svg'
 import { nextApi } from '@/lib/api-next'
 import { getPetTypes } from '@/app/api/pet/[id]/route'
 import { Galery } from './Galery'
+import whatsappFill from '@/assets/whatsappFill.svg'
 import whatsapp from '@/assets/whatsapp.svg'
 
 export default async function InfoPet({ params }: { params: { id: string } }) {
@@ -13,6 +14,8 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
   )
 
   const { images, pet, org } = data
+
+  const requerimentsPet = pet.requirements.split('#')
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -40,7 +43,7 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
           <p className="mt-5 w-full text-lg font-semibold leading-7 text-blue">
             {pet.description}
           </p>
-          <div className="mb-10 mt-10 grid grid-cols-3 gap-4 border-b border-blue border-opacity-10 pb-10">
+          <section className="mb-10 mt-10 grid grid-cols-3 gap-4 border-b border-blue border-opacity-10 pb-10">
             <div className="flex flex-col justify-between gap-3 border border-blue border-opacity-10 p-6">
               <div className="flex w-full justify-between gap-1">
                 {new Array(5).fill('').map((_, i) => {
@@ -83,8 +86,8 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
                 {pet.size === 'big' && 'Grande'}
               </p>
             </div>
-          </div>
-          <div className="flex gap-5">
+          </section>
+          <section className="mb-10 flex gap-5 border-b border-blue border-opacity-10 pb-10">
             <span className="flex h-fit w-fit rounded-2xl bg-yellow-dark p-4">
               <Image src={icoLogo} alt="" width={28} height={28} />
             </span>
@@ -93,14 +96,42 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
                 {org.name}
               </h3>
               <p className="text-base font-semibold leading-7 text-blue">{`${org.road}, ${org.number}, ${org.sector}, ${org.city} - ${org.state}`}</p>
-              <div className="mt-2 flex w-fit items-center gap-2 rounded-xl bg-blue bg-opacity-5 px-8 py-3">
-                <Image src={whatsapp} alt="" className="text-blue" />
+              <div className="mt-2 flex w-fit gap-2 rounded-xl bg-blue bg-opacity-5 px-8 py-3">
+                <Image src={whatsappFill} alt="" className="text-blue" />
                 <span className="text-lg font-bold leading-7 text-blue">
                   {org.whatsapp}
                 </span>
               </div>
             </div>
-          </div>
+          </section>
+          <section className="mb-10 flex flex-col gap-10 border-b border-blue border-opacity-10 pb-10">
+            <h3 className="text-3xl font-bold leading-7 text-blue">
+              Requisitos para adoção
+            </h3>
+            <div className="flex flex-col gap-3">
+              {requerimentsPet.map((item, i) => {
+                return (
+                  <div
+                    key={i}
+                    className="flex gap-4 rounded-xl border border-red bg-gradient-to-r from-[#F75F601A] to-[#F1515600] px-10 py-4"
+                  >
+                    <Info />
+                    <p>{item}</p>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+          <Link
+            href={`http://api.whatsapp.com/send?1=pt_BR&phone=55${org.whatsapp}`}
+            target="_blank"
+            className="flex w-full justify-center gap-4 rounded-3xl bg-green p-6"
+          >
+            <Image src={whatsapp} alt="" className="text-white" />
+            <span className="text-lg font-extrabold leading-[26px] text-white">
+              Entrar em contato
+            </span>
+          </Link>
         </div>
       </main>
     </div>
