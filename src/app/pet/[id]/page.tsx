@@ -115,8 +115,8 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
                     key={i}
                     className="flex gap-4 rounded-xl border border-red bg-gradient-to-r from-[#F75F601A] to-[#F1515600] px-10 py-4"
                   >
-                    <Info />
-                    <p>{item}</p>
+                    <Info className="text-red" />
+                    <p className="text-lg font-semibold text-red">{item}</p>
                   </div>
                 )
               })}
