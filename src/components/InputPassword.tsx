@@ -1,13 +1,14 @@
 'use client'
 import { Eye, EyeOff } from 'lucide-react'
 import { ComponentProps, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { tv, VariantProps } from 'tailwind-variants'
 
 const input = tv({
-  base: 'bg-[#faf5f5] w-full rounded-[10px] border border-[#D3E2E5] text-lg font-semibold leading-7 text-blue px-5 py-3 flex items-center',
+  base: 'bg-[#faf5f5] w-full rounded-[10px] outline-0 border border-[#D3E2E5] text-lg font-semibold leading-7 text-blue px-5 py-3 flex items-center',
   variants: {
     error: {
-      true: 'bg-[#F75F601A] border-red',
+      true: 'bg-[#F75F601A] border-opacity-50 border-red focus-visible:border-red focus-visible:border-opacity-100 text-red',
     },
   },
   defaultVariants: {
@@ -27,13 +28,14 @@ const label = tv({
 export type InputProps = ComponentProps<'input'> & VariantProps<typeof input>
 
 export function InputPassword({
-  name,
+  name = '',
   error,
   children,
   type,
   ...props
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(type !== 'password')
+  const { register } = useFormContext()
 
   return (
     <div className="flex flex-col gap-1">
@@ -42,9 +44,9 @@ export function InputPassword({
       </label>
       <div className="relative flex items-center justify-end">
         <input
+          {...register(name)}
           type={showPassword ? 'text' : 'password'}
           className={input({ error })}
-          name={name}
           {...props}
         />
         <button

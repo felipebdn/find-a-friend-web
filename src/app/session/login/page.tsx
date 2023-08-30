@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import logo from '@/assets/logo.svg'
 import hero from '@/assets/hero.png'
-import { InputBase } from '@/components/InputBase'
-import { InputPassword } from '@/components/InputPassword'
+import { FormLogin } from './Form'
 
 export default async function Login() {
   return (
@@ -13,15 +12,7 @@ export default async function Login() {
           <Image src={hero} className="w-96" alt="" />
         </div>
       </aside>
-      <main className="py-20">
-        <h1>Boas-vindas!</h1>
-        <div>
-          <InputBase error={false}>Email</InputBase>
-          <InputPassword type="password" error={false}>
-            Senha
-          </InputPassword>
-        </div>
-      </main>
+      <FormLogin />
     </div>
   )
 }
