@@ -5,10 +5,11 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputBase } from '@/components/InputBase'
 import { InputPassword } from '@/components/InputPassword'
+import { nextApi } from '@/lib/api-next'
 
 const formLoginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(6),
 })
 
 export type FormLoginSchemaType = z.infer<typeof formLoginSchema>
@@ -23,8 +24,14 @@ export function FormLogin() {
     formState: { errors },
   } = formData
 
-  function handleFormSubmit(data: FormLoginSchemaType) {
-    console.log(data)
+  async function handleFormSubmit(data: FormLoginSchemaType) {
+    const res = await nextApi.post('/api/session/login', {
+      data,
+      Headers: {
+        'content-type': 'application/json',
+      },
+    })
+    console.log(res)
   }
 
   return (
