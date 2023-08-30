@@ -13,15 +13,21 @@ const input = tv({
   },
 })
 
+const label = tv({
+  base: 'text-base font-semibold leading-normal text-blue',
+  variants: {
+    error: {
+      true: 'text-red',
+    },
+  },
+})
+
 export type InputProps = ComponentProps<'input'> & VariantProps<typeof input>
 
-export function Input({ name, error, children, ...props }: InputProps) {
+export function InputBase({ name, error, children, ...props }: InputProps) {
   return (
     <div className="flex flex-col gap-1">
-      <label
-        htmlFor={name}
-        className="text-base font-semibold leading-normal text-blue"
-      >
+      <label htmlFor={name} className={label({ error })}>
         {children}
       </label>
       <input className={input({ error })} name={name} {...props} />

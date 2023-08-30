@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import logo from '@/assets/logo.svg'
 import hero from '@/assets/hero.png'
-import { Input } from '@/components/Input'
+import { InputBase } from '@/components/InputBase'
+import { InputPassword } from '@/components/InputPassword'
 
 export default async function Login() {
   return (
@@ -15,7 +16,10 @@ export default async function Login() {
       <main className="py-20">
         <h1>Boas-vindas!</h1>
         <div>
-          <Input error={true}>Email</Input>
+          <InputBase error={false}>Email</InputBase>
+          <InputPassword type="password" error={false}>
+            Senha
+          </InputPassword>
         </div>
       </main>
     </div>
