@@ -18,10 +18,7 @@ interface responseAddressByCepTypes {
 const formRegisterSchema = z.object({
   name: z.string().nonempty('Campo obrigatorio'),
   organization: z.string().nonempty('Campo obrigatorio'),
-  email: z
-    .string()
-    .email('Digite um email válido')
-    .nonempty('Campo obrigatorio'),
+  email: z.string().email('Digite um email válido'),
   state: z.string().length(2).nonempty('Campo obrigatorio').toUpperCase(),
   city: z.string().nonempty('Campo obrigatorio'),
   cep: z.coerce.string().length(8, 'CEP tem 8 digitos'),
@@ -53,7 +50,7 @@ export default function Register() {
   } = formData
 
   function handleFormSubmit(data: FormRegisterSchemaType) {
-    console.log('teste')
+    console.log(data)
 
     // await nextApi.post('/api/session/login', {
     //   data,
