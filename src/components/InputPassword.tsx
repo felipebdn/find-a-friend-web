@@ -25,11 +25,15 @@ const label = tv({
   },
 })
 
-export type InputProps = ComponentProps<'input'> & VariantProps<typeof input>
+export type InputProps = ComponentProps<'input'> &
+  VariantProps<typeof input> & {
+    errorText: string | undefined
+  }
 
 export function InputPassword({
   name = '',
   error,
+  errorText,
   children,
   type,
   ...props
@@ -39,9 +43,16 @@ export function InputPassword({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name} className={label({ error })}>
-        {children}
-      </label>
+      <div className="flex items-center justify-between">
+        <label htmlFor={name} className={label({ error })}>
+          {children}
+        </label>
+        {error && errorText && (
+          <span className="text-sm font-medium leading-normal text-red">
+            {errorText}
+          </span>
+        )}
+      </div>
       <div className="relative flex items-center justify-end">
         <input
           {...register(name)}

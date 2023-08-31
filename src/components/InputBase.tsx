@@ -23,21 +23,32 @@ const label = tv({
   },
 })
 
-export type InputProps = ComponentProps<'input'> & VariantProps<typeof input>
+export type InputProps = ComponentProps<'input'> &
+  VariantProps<typeof input> & {
+    errorText: string | undefined
+  }
 
 export function InputBase({
   name = '',
   error,
   children,
+  errorText,
   ...props
 }: InputProps) {
   const { register } = useFormContext()
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name} className={label({ error })}>
-        {children}
-      </label>
+      <div className="flex items-center justify-between">
+        <label htmlFor={name} className={label({ error })}>
+          {children}
+        </label>
+        {error && errorText && (
+          <span className="text-sm font-medium leading-normal text-red">
+            {errorText}
+          </span>
+        )}
+      </div>
       <input className={input({ error })} {...register(name)} {...props} />
     </div>
   )

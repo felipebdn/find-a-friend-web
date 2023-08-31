@@ -9,21 +9,21 @@ export async function POST(req: NextRequest) {
       ...data,
     })
     const { token }: { token: string } = res.data
-    const redirectUrl = new URL('/', req.url)
-    const cookieExpiresInSeconds = 60 * 60 * 24 * 30 // 30 days
-    return NextResponse.redirect(redirectUrl, {
-      headers: {
-        'Set-Cookie': `token=${token}; Path=/; max-age=${cookieExpiresInSeconds};`,
+
+    return NextResponse.json(
+      {
+        token,
       },
-    })
+      {
+        status: 200,
+      },
+    )
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(
+        {},
         {
-          erro: error.response?.data.message,
-        },
-        {
-          status: error.response?.status,
+          status: 400,
         },
       )
     }
