@@ -25,13 +25,15 @@ export function FormLogin() {
   } = formData
 
   async function handleFormSubmit(data: FormLoginSchemaType) {
-    const res = await nextApi.post('/api/session/login', {
-      data,
-      Headers: {
-        'content-type': 'application/json',
-      },
-    })
-    console.log(res)
+    try {
+      const res = await nextApi.post('/api/session/login', {
+        data,
+        Headers: {
+          'content-type': 'application/json',
+        },
+      })
+      console.log(res)
+    } catch (error) {}
   }
 
   return (

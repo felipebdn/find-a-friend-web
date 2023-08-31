@@ -8,26 +8,14 @@ export async function POST(req: NextRequest) {
     const res = await api.post('/sessions', {
       ...data,
     })
-
-    // const { token }: { token: string } = res.data
-
-    // const redirectUrl = new URL('/', req.url)
-
-    // const cookieExpiresInSeconds = 60 * 60 * 24 * 30 // 30 days
-
-    // NextResponse.redirect(redirectUrl, {
-    //   headers: {
-    //     'Set-Cookie': `token=${token}; Path=/; max-age=${cookieExpiresInSeconds};`,
-    //   },
-    // })
-    return NextResponse.json(
-      {
-        token: res.data.token,
+    const { token }: { token: string } = res.data
+    const redirectUrl = new URL('/', req.url)
+    const cookieExpiresInSeconds = 60 * 60 * 24 * 30 // 30 days
+    return NextResponse.redirect(redirectUrl, {
+      headers: {
+        'Set-Cookie': `token=${token}; Path=/; max-age=${cookieExpiresInSeconds};`,
       },
-      {
-        status: 200,
-      },
-    )
+    })
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(
