@@ -3,18 +3,56 @@ import { UseControllerProps, useController } from 'react-hook-form'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { VariantProps, tv } from 'tailwind-variants'
 import { FormShemaType } from './FormExplore'
+import { ComponentProps, ReactNode } from 'react'
 
-const select = tv({
+const selectStyles = tv({
   base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl px-5 py-4 font-bold leading-none text-white outline-none',
   variants: {
     type: {
-      filter: 'bg-red-light',
-      location: 'bg-transparent border border-red-light',
+      primary: 'bg-red-light',
+      secundary: 'bg-transparent border border-red-light',
+      errorPrimary: '',
+      errorSecundary: '',
     },
   },
 })
 
-interface inputSelectFormProps extends VariantProps<typeof select> {
+const labelStyles = tv({
+  base: 'text-base font-semibold leading-normal text-blue',
+  variants: {
+    type: {
+      primary: 'bg-red-light',
+      secundary: 'bg-transparent border border-red-light',
+      errorPrimary: 'text-red',
+      errorSecundary: '',
+    },
+  },
+  defaultVariants: {
+    type: 'primary',
+  },
+})
+
+function Label(data: {
+  conteudo: ReactNode
+  name: string
+  type: 'primary' | 'secundary' | 'errorPrimary' | 'errorSecundary' | undefined
+}) {
+  return (
+    <label htmlFor={data.name} className={labelStyles({ type: data.type })}>
+      {data.conteudo}
+    </label>
+  )
+}
+
+function ErrorMessage({ errorText }: { errorText: string }) {
+  return (
+    <span className="text-sm font-medium leading-normal text-red">
+      {errorText}
+    </span>
+  )
+}
+
+type SelectListType = {
   formProps: UseControllerProps<FormShemaType>
   options: {
     value: string
@@ -25,29 +63,24 @@ interface inputSelectFormProps extends VariantProps<typeof select> {
   handleCountyChange?: (handleCounty: string) => void
 }
 
-export function InputSelectForm({
-  formProps,
-  options,
-  placeholder,
-  type,
-  handleStateChange,
-  handleCountyChange,
-}: inputSelectFormProps) {
-  const { field } = useController(formProps)
-
+function SelectList(
+  data: SelectListType,
+  type: 'primary' | 'secundary' | 'errorPrimary' | 'errorSecundary' | undefined,
+) {
+  const { field } = useController(data.formProps)
   return (
     <Select.Root
       name={field.name}
       onValueChange={(value) => {
         field.onChange(value)
-        handleStateChange && handleStateChange(value)
-        handleCountyChange && handleCountyChange(value)
+        data.handleStateChange && data.handleStateChange(value)
+        data.handleCountyChange && data.handleCountyChange(value)
       }}
     >
-      <Select.Trigger className={select({ type })}>
+      <Select.Trigger className={selectStyles({ type })}>
         <Select.Value>
-          {options.find((item) => item.value === field.value)?.text ||
-            placeholder}
+          {data.options.find((item) => item.value === field.value)?.text ||
+            data.placeholder}
         </Select.Value>
         <Select.Icon>
           <ChevronDown />
@@ -62,7 +95,7 @@ export function InputSelectForm({
             <ChevronUp />
           </Select.ScrollUpButton>
           <Select.Viewport>
-            {options.map((item) => {
+            {data.options.map((item) => {
               return (
                 <Select.Item
                   key={item.value}
@@ -80,5 +113,41 @@ export function InputSelectForm({
         </Select.Content>
       </Select.Portal>
     </Select.Root>
+  )
+}
+
+export type inputSelectFormProps = ComponentProps<'select'> &
+  VariantProps<typeof selectStyles> &
+  SelectListType & {
+    errorText: string | undefined
+  }
+
+export function InputSelectForm({
+  name = '',
+  type,
+  errorText,
+  children,
+  placeholder,
+  options,
+  handleCountyChange,
+  handleStateChange,
+  formProps,
+}: inputSelectFormProps) {
+  return (
+    <div className="flex flex-col gap-1">
+      {children && (
+        <div className="flex items-center justify-between">
+          <Label conteudo={children} type={type} name={name} />
+          {errorText && <ErrorMessage errorText={errorText} />}
+        </div>
+      )}
+      <SelectList
+        formProps={formProps}
+        options={options}
+        placeholder={placeholder}
+        handleCountyChange={handleCountyChange}
+        handleStateChange={handleStateChange}
+      />
+    </div>
   )
 }
