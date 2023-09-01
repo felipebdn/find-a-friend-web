@@ -1,4 +1,4 @@
-import { ArrowLeftIcon, Dot, Info, Scan, Zap } from 'lucide-react'
+import { Dot, Info, Scan, Zap } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import icoLogo from '@/assets/ico-logo.svg'
@@ -18,17 +18,7 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
   const requerimentsPet = pet.requirements.split('#')
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <header className="flex w-full justify-center bg-red">
-        <div className="flex w-full max-w-2xl justify-between py-2">
-          <button className="rounded-xl bg-yellow p-3 leading-none">
-            <ArrowLeftIcon className="text-blue" size={20} strokeWidth={3} />
-          </button>
-          <Link href="/">
-            <Image src={icoLogo} alt="" />
-          </Link>
-        </div>
-      </header>
+    <>
       <section className="py-10">
         <span className="text-lg font-semibold leading-7 text-complemets-text">
           Seu novo amigo
@@ -134,6 +124,6 @@ export default async function InfoPet({ params }: { params: { id: string } }) {
           </Link>
         </div>
       </main>
-    </div>
+    </>
   )
 }

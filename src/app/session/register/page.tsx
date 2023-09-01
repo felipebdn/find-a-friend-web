@@ -5,7 +5,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InputBase } from '@/components/InputBase'
 import { InputPassword } from '@/components/InputPassword'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { nextApi } from '@/lib/api-next'
 
 interface responseAddressByCepTypes {
   bairro: string
@@ -15,24 +16,25 @@ interface responseAddressByCepTypes {
   uf: string
 }
 
-const formRegisterSchema = z.object({
-  name: z.string().nonempty('Campo obrigatorio'),
-  organization: z.string().nonempty('Campo obrigatorio'),
-  email: z.string().email('Digite um email válido'),
-  state: z.string().length(2).nonempty('Campo obrigatorio').toUpperCase(),
-  city: z.string().nonempty('Campo obrigatorio'),
-  cep: z.coerce.string().length(8, 'CEP tem 8 digitos'),
-  number: z.string(),
-  road: z.string().nonempty('Campo obrigatorio'),
-  sector: z.string().nonempty('Campo obrigatorio'),
-  whatsapp: z.string().nonempty('Campo obrigatorio'),
-  password: z.string().min(6, 'Senha de no mínimo 2 digitos'),
-  passwordConf: z.string().min(6, 'Senha de no mínimo 2 digitos'),
-})
-// .refine((data) => data.password === data.passwordConf, {
-//   message: 'As senhas não coincidem',
-//   path: ['passwordConf'],
-// })
+export const formRegisterSchema = z
+  .object({
+    name: z.string().nonempty('Campo obrigatorio'),
+    organization: z.string().nonempty('Campo obrigatorio'),
+    email: z.string().email('Digite um email válido'),
+    state: z.string().length(2).nonempty('Campo obrigatorio').toUpperCase(),
+    city: z.string().nonempty('Campo obrigatorio'),
+    cep: z.coerce.string().length(8, 'CEP tem 8 digitos'),
+    number: z.string(),
+    road: z.string().nonempty('Campo obrigatorio'),
+    sector: z.string().nonempty('Campo obrigatorio'),
+    whatsapp: z.string().nonempty('Campo obrigatorio'),
+    password: z.string().min(6, 'Senha de no mínimo 2 digitos'),
+    passwordConf: z.string().min(6, 'Senha de no mínimo 2 digitos'),
+  })
+  .refine((data) => data.password === data.passwordConf, {
+    message: 'As senhas não coincidem',
+    path: ['passwordConf'],
+  })
 
 export type FormRegisterSchemaType = z.infer<typeof formRegisterSchema>
 
@@ -49,15 +51,20 @@ export default function Register() {
     setValue,
   } = formData
 
-  function handleFormSubmit(data: FormRegisterSchemaType) {
-    console.log(data)
-
-    // await nextApi.post('/api/session/login', {
-    //   data,
-    //   Headers: {
-    //     'content-type': 'application/json',
-    //   },
-    // })
+  async function handleFormSubmit(data: FormRegisterSchemaType) {
+    try {
+      await nextApi.post('/api/session/register', {
+        data,
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 409) {
+          setError('email', {
+            message: 'Email já existe',
+          })
+        }
+      }
+    }
   }
 
   async function getAddressByCep(cep: number) {
@@ -94,6 +101,13 @@ export default function Register() {
             error={!!errors.name ?? false}
           >
             Nome do responsável *
+          </InputBase>
+          <InputBase
+            errorText={errors.organization?.message}
+            name="organization"
+            error={!!errors.organization ?? false}
+          >
+            Nome da organizaçõ *
           </InputBase>
           <InputBase
             errorText={errors.email?.message}
@@ -175,10 +189,6 @@ export default function Register() {
           </InputPassword>
         </div>
       </FormProvider>
-
-      <span className="text-center text-base font-semibold text-red">
-        Email ou senha inválidos
-      </span>
 
       <div className="flex flex-col items-center gap-5">
         <button
