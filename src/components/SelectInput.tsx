@@ -2,27 +2,29 @@ import * as Select from '@radix-ui/react-select'
 import { UseControllerProps, useController } from 'react-hook-form'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { VariantProps, tv } from 'tailwind-variants'
-import { FormShemaType } from './FormExplore'
 import { ComponentProps, ReactNode } from 'react'
 
 const selectStyles = tv({
   base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl px-5 py-4 font-bold leading-none text-white outline-none',
   variants: {
     type: {
-      primary: 'bg-red-light',
-      secundary: 'bg-transparent border border-red-light',
+      primary: '',
+      secundary: 'bg-red-light',
       errorPrimary: '',
-      errorSecundary: '',
+      errorSecundary: 'bg-red-light',
     },
+  },
+  defaultVariants: {
+    type: 'primary',
   },
 })
 
 const labelStyles = tv({
-  base: 'text-base font-semibold leading-normal text-blue',
+  base: 'text-base font-semibold leading-normal text-white',
   variants: {
     type: {
-      primary: 'bg-red-light',
-      secundary: 'bg-transparent border border-red-light',
+      primary: '',
+      secundary: '',
       errorPrimary: 'text-red',
       errorSecundary: '',
     },
@@ -53,7 +55,8 @@ function ErrorMessage({ errorText }: { errorText: string }) {
 }
 
 type SelectListType = {
-  formProps: UseControllerProps<FormShemaType>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  formProps: UseControllerProps<any>
   options: {
     value: string
     text: string
@@ -64,10 +67,17 @@ type SelectListType = {
 }
 
 function SelectList(
-  data: SelectListType,
-  type: 'primary' | 'secundary' | 'errorPrimary' | 'errorSecundary' | undefined,
+  data: SelectListType & {
+    type:
+      | 'primary'
+      | 'secundary'
+      | 'errorPrimary'
+      | 'errorSecundary'
+      | undefined
+  },
 ) {
   const { field } = useController(data.formProps)
+
   return (
     <Select.Root
       name={field.name}
@@ -77,7 +87,7 @@ function SelectList(
         data.handleCountyChange && data.handleCountyChange(value)
       }}
     >
-      <Select.Trigger className={selectStyles({ type })}>
+      <Select.Trigger className={selectStyles({ type: data.type })}>
         <Select.Value>
           {data.options.find((item) => item.value === field.value)?.text ||
             data.placeholder}
@@ -142,6 +152,7 @@ export function InputSelectForm({
         </div>
       )}
       <SelectList
+        type={type}
         formProps={formProps}
         options={options}
         placeholder={placeholder}

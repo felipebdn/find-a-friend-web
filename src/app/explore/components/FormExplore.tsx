@@ -3,13 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Search } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { InputSelectForm } from './SelectInput'
 import icoLogo from '../../../assets/ico-logo.svg'
 import Image from 'next/image'
 import { useStateHook } from '@/lib/use-state-hook'
 import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { InputSelectForm } from '@/components/SelectInput'
 
 interface formExploreProps {
   ufData: {
@@ -92,7 +92,7 @@ export function FormExplore({ ufData }: formExploreProps) {
         <div className="flex gap-2">
           <InputSelectForm
             errorText={errors.uf?.message}
-            type="primary"
+            type="secundary"
             formProps={{ control, name: 'uf' }}
             placeholder="UF"
             handleStateChange={handleStateChange}
@@ -104,7 +104,7 @@ export function FormExplore({ ufData }: formExploreProps) {
             })}
           />
           <InputSelectForm
-            type="primary"
+            type="secundary"
             errorText={errors.county?.message}
             formProps={{ control, name: 'county' }}
             placeholder="Cidade"
@@ -135,7 +135,7 @@ export function FormExplore({ ufData }: formExploreProps) {
           </Link>
         </div>
         <InputSelectForm
-          type="primary"
+          type="secundary"
           formProps={{ control, name: 'age' }}
           errorText={errors.age?.message}
           placeholder="Escolha"
@@ -157,7 +157,7 @@ export function FormExplore({ ufData }: formExploreProps) {
           Idade
         </InputSelectForm>
         <InputSelectForm
-          type="primary"
+          type="secundary"
           errorText={errors.energy_level?.message}
           formProps={{ control, name: 'energy_level' }}
           placeholder="Escolha"
@@ -187,7 +187,7 @@ export function FormExplore({ ufData }: formExploreProps) {
           Nivel de Energia
         </InputSelectForm>
         <InputSelectForm
-          type="primary"
+          type="secundary"
           errorText={errors.size?.message}
           formProps={{ control, name: 'size' }}
           placeholder="Escolha"
@@ -209,7 +209,7 @@ export function FormExplore({ ufData }: formExploreProps) {
           Porte do animal
         </InputSelectForm>
         <InputSelectForm
-          type="primary"
+          type="secundary"
           errorText={errors.independence?.message}
           formProps={{ control, name: 'independence' }}
           placeholder="Escolha"

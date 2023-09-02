@@ -1,26 +1,44 @@
-'use client'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { cookies } from 'next/headers'
+import Image from 'next/image'
+import { redirect } from 'next/navigation'
+import icoLogo from '@/assets/ico-logo.svg'
+import { getOrg } from '@/lib/sessionOrg'
+import { LogOut } from 'lucide-react'
+import FormRegisterPet from './components/form'
 
-const petBodySchema = z.object({
-  collar: z.string(),
-  name: z.string(),
-  energy_level: z.coerce.number().min(1).max(5),
-  size: z.enum(['small', 'medium', 'big']),
-  age: z.enum(['cub', 'adolescent', 'elderly']),
-  description: z.string(),
-  independence: z.enum(['low', 'medium', 'high']),
-  anvironment: z.string(),
-  requirements: z.string(),
-})
+export default async function PetRegister() {
+  const isAuthenticated = cookies().has('tokenSessionFindAFriend')
 
-type PetBodySchemaType = z.infer<typeof petBodySchema>
+  if (!isAuthenticated) {
+    redirect('/session/login')
+  }
 
-export default function RegisterPet() {
-  const { control, handleSubmit } = useForm<PetBodySchemaType>({
-    resolver: zodResolver(petBodySchema),
-  })
+  const org = getOrg()
 
-  return <form></form>
+  return (
+    <div className="flex w-full flex-col items-center">
+      <div className="mt-10 flex w-full max-w-2xl gap-[18px] rounded-3xl bg-blue px-16 py-7">
+        <div className="rounded-2xl bg-yellow-dark p-4 md:w-fit">
+          <Image src={icoLogo} width={27} height={27} alt="" />
+        </div>
+        <main className="flex h-full flex-1 flex-col">
+          <h3 className="mt-1 text-3xl font-bold leading-7 text-white">
+            {org.name}
+          </h3>
+          <p className="text-base font-semibold leading-7 text-white">{`${
+            org.road
+          }, ${org.number ?? 'S/n'}, ${org.sector}, ${org.city} - ${
+            org.uf
+          }`}</p>
+        </main>
+        <button className="rounded-2xl bg-[#114A80] px-[18px] py-4  hover:bg-[#114a80a9]">
+          <LogOut strokeWidth={2.5} className="h-6 w-6 text-white" />
+        </button>
+      </div>
+      <main>
+        <h3>Adicione um pet</h3>
+        <FormRegisterPet />
+      </main>
+    </div>
+  )
 }

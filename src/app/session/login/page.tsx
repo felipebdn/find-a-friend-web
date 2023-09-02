@@ -40,7 +40,7 @@ export default function Login() {
       })
 
       if (res.data.token) {
-        cookie.set('tokenteste', res.data.token, {
+        cookie.set('tokenSessionFindAFriend', res.data.token, {
           expires: 7,
           path: '/',
         })
