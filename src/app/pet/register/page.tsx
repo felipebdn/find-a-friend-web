@@ -16,8 +16,8 @@ export default async function PetRegister() {
   const org = getOrg()
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <div className="mt-10 flex w-full max-w-2xl gap-[18px] rounded-3xl bg-blue px-16 py-7">
+    <div className="flex w-full flex-col items-center gap-8 pt-10">
+      <div className="flex w-full max-w-2xl gap-[18px] rounded-3xl bg-blue px-16 py-7">
         <div className="rounded-2xl bg-yellow-dark p-4 md:w-fit">
           <Image src={icoLogo} width={27} height={27} alt="" />
         </div>
@@ -35,8 +35,10 @@ export default async function PetRegister() {
           <LogOut strokeWidth={2.5} className="h-6 w-6 text-white" />
         </button>
       </div>
-      <main>
-        <h3>Adicione um pet</h3>
+      <main className="flex w-full max-w-2xl flex-col rounded-3xl border border-[#D3E2E5] bg-white px-16 py-10">
+        <h3 className="mb-10 w-full border-b border-[#D3E2E5] pb-5 text-4xl font-extrabold leading-8 text-blue">
+          Adicione um pet
+        </h3>
         <FormRegisterPet />
       </main>
     </div>

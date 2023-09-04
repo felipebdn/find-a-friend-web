@@ -8,7 +8,7 @@ const selectStyles = tv({
   base: 'text-base inline-flex items-center justify-between gap-1 rounded-2xl px-5 py-4 font-bold leading-none text-white outline-none',
   variants: {
     type: {
-      primary: '',
+      primary: 'border border-[#d3e2e5] bg-[#f5f8fa] text-blue',
       secundary: 'bg-red-light',
       errorPrimary: '',
       errorSecundary: 'bg-red-light',
@@ -23,7 +23,7 @@ const labelStyles = tv({
   base: 'text-base font-semibold leading-normal text-white',
   variants: {
     type: {
-      primary: '',
+      primary: 'text-blue',
       secundary: '',
       errorPrimary: 'text-red',
       errorSecundary: '',
