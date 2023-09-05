@@ -1,13 +1,15 @@
 'use client'
-import { InputBase } from '@/components/InputBase'
-import { InputSelectForm } from '@/components/SelectInput'
-import { TextArea } from '@/components/TexteArea'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
+import { UploadCloud } from 'lucide-react'
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const petBodySchema = z.object({
-  images: z.array(z.object({ file: z.instanceof(File) })),
+  images: z.array(
+    z.object({
+      file: z.instanceof(File).nullable(),
+    }),
+  ),
 })
 
 type PetBodySchemaType = z.infer<typeof petBodySchema>
@@ -22,7 +24,16 @@ export default function FormRegisterPet() {
     handleSubmit,
     register,
     formState: { errors },
+    getValues,
+    watch,
   } = formData
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'images',
+  })
+
+  console.log(watch('images'))
 
   function FormSubmit(data: PetBodySchemaType) {
     console.log(data)
@@ -31,7 +42,25 @@ export default function FormRegisterPet() {
   return (
     <form onSubmit={handleSubmit(FormSubmit)} className="flex flex-col gap-6">
       <FormProvider {...formData}>
-        <input type="file" accept="image/*" multiple {...register('images')} />
+        <label
+          htmlFor="file"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(event) => {
+            event.preventDefault()
+            append({ file: event.dataTransfer.files.item(0) })
+          }}
+          className="flex w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border border-[#d3e2e5] bg-[#f5f8fa] py-10 text-blue"
+        >
+          <UploadCloud size={24} />
+          Arraste e solte o arquivo
+        </label>
+        <input
+          type="file"
+          id="file"
+          accept="image/*"
+          className="invisible"
+          {...register('images')}
+        />
 
         <button type="submit">enviar</button>
         {/* <InputBase
