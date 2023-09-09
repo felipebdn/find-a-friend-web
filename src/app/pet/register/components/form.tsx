@@ -1,11 +1,12 @@
 'use client'
+import { Field } from '@/components/Field'
 import { InputBase } from '@/components/InputBase'
 import { InputSelectForm } from '@/components/SelectInput'
 import { TextArea } from '@/components/TexteArea'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileText, Plus, UploadCloud, XSquare } from 'lucide-react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
-import { object, z } from 'zod'
+import { z } from 'zod'
 
 const petBodySchema = z.object({
   images: z.array(
@@ -22,7 +23,9 @@ const petBodySchema = z.object({
   anvironment: z.enum(['small', 'medium', 'big']),
   requirements: z.array(
     z.object({
-      title: z.string(),
+      title: z.string().nonempty({
+        message: 'Campo obrigatório',
+      }),
     }),
   ),
 })
@@ -45,10 +48,14 @@ export default function FormRegisterPet() {
     name: 'images',
   })
 
-  const imagesRequeriments = useFieldArray({
+  const requerimentsField = useFieldArray({
     control,
     name: 'requirements',
   })
+
+  function addNewRequeriment() {
+    requerimentsField.append({ title: '' })
+  }
 
   function FormSubmit(data: PetBodySchemaType) {
     console.log(data)
@@ -59,8 +66,11 @@ export default function FormRegisterPet() {
       <h3 className="mb-10 w-full border-b border-[#D3E2E5] pb-5 text-4xl font-extrabold leading-8 text-blue">
         Adicione um pet
       </h3>
-      <form onSubmit={handleSubmit(FormSubmit)} className="flex flex-col gap-6">
-        <FormProvider {...formData}>
+      <FormProvider {...formData}>
+        <form
+          onSubmit={handleSubmit(FormSubmit)}
+          className="flex flex-col gap-6"
+        >
           <InputBase
             name="name"
             errorText={errors.name?.message}
@@ -199,68 +209,96 @@ export default function FormRegisterPet() {
           >
             Ambiente
           </InputSelectForm>
-        </FormProvider>
 
-        <div className="flex flex-col gap-2">
-          <span className="text-base font-semibold leading-4 text-blue">
-            Fotos
-          </span>
-          <label
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(event) => {
-              event.preventDefault()
-              imagesField.append({ file: event.dataTransfer.files.item(0) })
-            }}
-            className="flex w-full flex-col items-center justify-center gap-3 rounded-xl border border-[#d3e2e5] bg-[#f5f8fa] py-10 text-blue"
-          >
-            <UploadCloud size={24} />
-            Arraste e solte o arquivo
-          </label>
+          <div className="flex flex-col gap-2">
+            <span className="text-base font-semibold leading-4 text-blue">
+              Fotos
+            </span>
+            <label
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(event) => {
+                event.preventDefault()
+                imagesField.append({ file: event.dataTransfer.files.item(0) })
+              }}
+              className="flex w-full flex-col items-center justify-center gap-3 rounded-xl border border-[#d3e2e5] bg-[#f5f8fa] py-10 text-blue"
+            >
+              <UploadCloud size={24} />
+              Arraste e solte o arquivo
+            </label>
 
-          {imagesField.fields.map((item, index) => {
-            return (
-              <div
-                key={index}
-                className="flex items-center justify-between rounded-xl border border-[#d3e2e5] p-3"
-              >
-                <div className="flex items-center gap-3">
-                  <FileText size={24} className="text-[#d3e2e5]" />
-                  <span className="text-sm font-normal leading-7 text-blue">
-                    {item.file?.name}
-                  </span>
-                </div>
-                <button
-                  className="cursor-pointer"
-                  onClick={() => imagesField.remove(index)}
+            {imagesField.fields.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded-xl border border-[#d3e2e5] p-3"
                 >
-                  <XSquare size={24} className="text-red" />
-                </button>
-              </div>
+                  <div className="flex items-center gap-3">
+                    <FileText size={24} className="text-[#d3e2e5]" />
+                    <span className="text-sm font-normal leading-7 text-blue">
+                      {item.file?.name}
+                    </span>
+                  </div>
+                  <button
+                    className="cursor-pointer"
+                    onClick={() => imagesField.remove(index)}
+                  >
+                    <XSquare size={24} className="text-red" />
+                  </button>
+                </div>
+              )
+            })}
+
+            <label
+              htmlFor="file"
+              className="mt-4 flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-red bg-red bg-opacity-10 py-4 text-red"
+            >
+              <Plus size={24} />
+            </label>
+            <input
+              type="file"
+              id="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(event) => {
+                if (event.target.files) {
+                  imagesField.append({ file: event.target.files[0] })
+                }
+              }}
+            />
+          </div>
+          <h3 className="mt-10 w-full border-b border-[#D3E2E5] pb-5 text-4xl font-extrabold leading-8 text-blue">
+            Requisitos para adoção
+          </h3>
+          {requerimentsField.fields.map((field, index) => {
+            const fieldName = `requirements.${index}.title`
+
+            console.log(errors.requirements)
+
+            return (
+              <Field key={index}>
+                <InputBase
+                  key={index}
+                  name={fieldName}
+                  errorText={errors.requirements?.[index]?.message}
+                  error={!!errors.requirements?.[index]}
+                >
+                  Requisito
+                </InputBase>
+              </Field>
             )
           })}
-
-          <label
-            htmlFor="file"
-            className="mt-4 flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-red bg-red bg-opacity-10 py-6 text-red"
+          <button
+            onClick={addNewRequeriment}
+            className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-red bg-red bg-opacity-10 py-4 text-red"
           >
             <Plus size={24} />
-          </label>
-          <input
-            type="file"
-            id="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(event) => {
-              if (event.target.files) {
-                imagesField.append({ file: event.target.files[0] })
-              }
-            }}
-          />
-        </div>
-        <h3 className="mb-10 mt-10 w-full border-b border-[#D3E2E5] pb-5 text-4xl font-extrabold leading-8 text-blue">
-          Requisitos para adoção
-        </h3>
-      </form>
+          </button>
+
+          <button className="mt-10 rounded-3xl bg-yellow py-5 text-lg font-extrabold leading-6 text-blue">
+            Confirmar
+          </button>
+        </form>
+      </FormProvider>
     </main>
   )
 }
