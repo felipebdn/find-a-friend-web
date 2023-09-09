@@ -35,12 +35,7 @@ export default async function PetRegister() {
           <LogOut strokeWidth={2.5} className="h-6 w-6 text-white" />
         </button>
       </div>
-      <main className="flex w-full max-w-2xl flex-col rounded-3xl border border-[#D3E2E5] bg-white px-16 py-10">
-        <h3 className="mb-10 w-full border-b border-[#D3E2E5] pb-5 text-4xl font-extrabold leading-8 text-blue">
-          Adicione um pet
-        </h3>
-        <FormRegisterPet />
-      </main>
+      <FormRegisterPet />
     </div>
   )
 }
