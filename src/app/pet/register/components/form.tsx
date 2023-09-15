@@ -1,21 +1,25 @@
 'use client'
 import { Field } from '@/components/Field'
+import { parseCookies } from 'nookies'
 import { InputBase } from '@/components/InputBase'
 import { InputSelectForm } from '@/components/SelectInput'
 import { TextArea } from '@/components/TexteArea'
+import { api } from '@/lib/api-server'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AxiosError } from 'axios'
 import { FileText, Plus, UploadCloud, XSquare } from 'lucide-react'
+import { NextResponse } from 'next/server'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-const petBodySchema = z.object({
+export const petBodySchema = z.object({
   images: z.array(
     z.object({
       file: z.instanceof(File).nullable(),
     }),
   ),
   name: z.string(),
-  description: z.string(),
+  description: z.string().nonempty('Diga algo sobre o pet'),
   age: z.enum(['cub', 'adolescent', 'elderly']),
   size: z.enum(['small', 'medium', 'big']),
   energy_level: z.coerce.number().min(1).max(5),
@@ -23,9 +27,7 @@ const petBodySchema = z.object({
   anvironment: z.enum(['small', 'medium', 'big']),
   requirements: z.array(
     z.object({
-      title: z.string().nonempty({
-        message: 'Campo obrigatório',
-      }),
+      title: z.string(),
     }),
   ),
 })
@@ -57,8 +59,45 @@ export default function FormRegisterPet() {
     requerimentsField.append({ title: '' })
   }
 
-  function FormSubmit(data: PetBodySchemaType) {
-    console.log(data)
+  async function FormSubmit({
+    images,
+    requirements,
+    ...data
+  }: PetBodySchemaType) {
+    try {
+      const requirementsParse = requerimentsField.fields.join('#')
+
+      const token = parseCookies().tokenSessionFindAFriend
+
+      const dataSubmit = { requirements: requirementsParse, ...data }
+
+      console.log(dataSubmit)
+
+      const res = await api.post(
+        '/pets',
+        {
+          data: dataSubmit,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      console.log(res)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 409) {
+          return NextResponse.json(
+            {},
+            {
+              status: 409,
+            },
+          )
+        }
+      }
+    }
   }
 
   return (
@@ -271,8 +310,6 @@ export default function FormRegisterPet() {
           </h3>
           {requerimentsField.fields.map((field, index) => {
             const fieldName = `requirements.${index}.title`
-
-            console.log(errors.requirements)
 
             return (
               <Field key={index}>

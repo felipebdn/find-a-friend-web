@@ -17,7 +17,7 @@ export default async function PetRegister() {
 
   return (
     <div className="flex w-full flex-col items-center gap-8 pt-10">
-      <div className="flex w-full max-w-2xl gap-[18px] rounded-3xl bg-blue px-16 py-7">
+      <div className="flex w-full max-w-2xl items-center gap-[18px] rounded-3xl bg-blue px-16 py-7">
         <div className="rounded-2xl bg-yellow-dark p-4 md:w-fit">
           <Image src={icoLogo} width={27} height={27} alt="" />
         </div>

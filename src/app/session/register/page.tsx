@@ -45,7 +45,7 @@ export default function Register() {
 
   const {
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     trigger,
     setError,
     setValue,
@@ -193,7 +193,9 @@ export default function Register() {
       <div className="flex flex-col items-center gap-5">
         <button
           type="submit"
-          className="w-full rounded-[20px] bg-blue p-4 text-xl font-extrabold leading-8 text-white"
+          disabled={isSubmitting}
+          data-disabled={isSubmitting}
+          className="w-full rounded-[20px] bg-blue p-4 text-xl font-extrabold leading-8 text-white data-[disabled=true]:cursor-not-allowed data-[disabled=true]:bg-opacity-50"
         >
           Cadastrar
         </button>
