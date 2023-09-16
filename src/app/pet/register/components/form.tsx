@@ -1,16 +1,14 @@
 'use client'
-import { Field } from '@/components/Field'
+import { z } from 'zod'
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { parseCookies } from 'nookies'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FileText, Plus, UploadCloud, XSquare } from 'lucide-react'
+import { Field } from '@/components/Field'
 import { InputBase } from '@/components/InputBase'
 import { InputSelectForm } from '@/components/SelectInput'
 import { TextArea } from '@/components/TexteArea'
 import { api } from '@/lib/api-server'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { AxiosError } from 'axios'
-import { FileText, Plus, UploadCloud, XSquare } from 'lucide-react'
-import { NextResponse } from 'next/server'
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 export const petBodySchema = z.object({
   images: z.array(
@@ -64,15 +62,12 @@ export default function FormRegisterPet() {
     requirements,
     ...data
   }: PetBodySchemaType) {
+    const requirementsParse = requerimentsField.fields.join('#')
+
+    const token = parseCookies().tokenSessionFindAFriend
+
+    const dataSubmit = { requirements: requirementsParse, ...data }
     try {
-      const requirementsParse = requerimentsField.fields.join('#')
-
-      const token = parseCookies().tokenSessionFindAFriend
-
-      const dataSubmit = { requirements: requirementsParse, ...data }
-
-      console.log(dataSubmit)
-
       const res = await api.post(
         '/pets',
         {
@@ -81,23 +76,24 @@ export default function FormRegisterPet() {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
           },
         },
       )
       console.log(res)
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status === 409) {
-          return NextResponse.json(
-            {},
-            {
-              status: 409,
-            },
-          )
-        }
-      }
+      console.log()
     }
+    //   if (error instanceof AxiosError) {
+    //     if (error.response?.status === 409) {
+    //       return NextResponse.json(
+    //         {},
+    //         {
+    //           status: 409,
+    //         },
+    //       )
+    //     }
+    //   }
+    // }
   }
 
   return (
@@ -324,14 +320,17 @@ export default function FormRegisterPet() {
               </Field>
             )
           })}
-          <button
+          <div
             onClick={addNewRequeriment}
             className="flex w-full cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-red bg-red bg-opacity-10 py-4 text-red"
           >
             <Plus size={24} />
-          </button>
+          </div>
 
-          <button className="mt-10 rounded-3xl bg-yellow py-5 text-lg font-extrabold leading-6 text-blue">
+          <button
+            type="submit"
+            className="mt-10 rounded-3xl bg-yellow py-5 text-lg font-extrabold leading-6 text-blue"
+          >
             Confirmar
           </button>
         </form>

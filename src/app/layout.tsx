@@ -1,7 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Nunito } from 'next/font/google'
-import { ReactNode } from 'react'
+import { ReactNode, StrictMode } from 'react'
 
 const nunito = Nunito({
   subsets: ['latin'],
@@ -14,8 +14,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR" className={nunito.className}>
-      <body>{children}</body>
-    </html>
+    <StrictMode>
+      <html lang="pt-BR" className={nunito.className}>
+        <body>{children}</body>
+      </html>
+    </StrictMode>
   )
 }
