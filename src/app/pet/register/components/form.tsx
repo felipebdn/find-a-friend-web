@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import { parseCookies } from 'nookies'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FileText, Plus, UploadCloud, XSquare } from 'lucide-react'
+import { Check, FileText, Plus, UploadCloud, XSquare } from 'lucide-react'
 import { Field } from '@/components/Field'
 import { InputBase } from '@/components/InputBase'
 import { InputSelectForm } from '@/components/SelectInput'
@@ -40,7 +40,8 @@ export default function FormRegisterPet() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful },
+    reset,
   } = formData
 
   const imagesField = useFieldArray({
@@ -62,16 +63,17 @@ export default function FormRegisterPet() {
     requirements,
     ...data
   }: PetBodySchemaType) {
-    const requirementsParse = requerimentsField.fields.join('#')
+    const requirementsParse = requirements.map((item) => item.title).join('#')
 
     const token = parseCookies().tokenSessionFindAFriend
 
     const dataSubmit = { requirements: requirementsParse, ...data }
+
     try {
       const res = await api.post(
         '/pets',
         {
-          data: dataSubmit,
+          ...dataSubmit,
         },
         {
           headers: {
@@ -79,9 +81,9 @@ export default function FormRegisterPet() {
           },
         },
       )
-      console.log(res)
+      res.status === 201 && reset()
     } catch (error) {
-      console.log()
+      console.log(error)
     }
     //   if (error instanceof AxiosError) {
     //     if (error.response?.status === 409) {
@@ -329,9 +331,14 @@ export default function FormRegisterPet() {
 
           <button
             type="submit"
-            className="mt-10 rounded-3xl bg-yellow py-5 text-lg font-extrabold leading-6 text-blue"
+            data-seccess={isSubmitSuccessful}
+            className="mt-10 flex items-center justify-center rounded-3xl bg-yellow py-5 text-lg font-extrabold leading-6 text-blue disabled:cursor-not-allowed data-[seccess=true]:bg-green-dark"
           >
-            Confirmar
+            {isSubmitSuccessful ? (
+              <Check className="text-white" size={24} strokeWidth={2.5} />
+            ) : (
+              'Confirmar'
+            )}
           </button>
         </form>
       </FormProvider>
